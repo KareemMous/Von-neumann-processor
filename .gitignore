@@ -1,6 +1,3 @@
-
-<<<<<<< HEAD
-<<<<<<< HEAD
 *.qdb
 *.qpg
 *.qtl
@@ -8,19 +5,10 @@
 *.mti
 *.mpf
 *.mpf
-Von-neumann-processor.mpf
+*.bak
 work/_info
 work/_vmake
-work/_info
+transcript
 Von-neumann-processor.mpf
-=======
-transcript
 Von-neumann-processor.cr.mti
 vsim.wlf
->>>>>>> origin/Kareem
-*.bak
-=======
-transcript
-Von-neumann-processor.cr.mti
-vsim.wlf
->>>>>>> origin/Kareem
