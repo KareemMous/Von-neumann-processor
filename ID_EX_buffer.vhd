@@ -12,8 +12,6 @@ ENTITY decodeExecute IS
 		i_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		i_immediate : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		i_cuSignals : IN STD_LOGIC_VECTOR(22 DOWNTO 0);
-		-- controlUnitSignals <= s_regWrite '1' & s_regSrc '1' & s_aluSrc '1' & s_aluOp '5' & s_ccrEnable '1' & s_setC '1' & s_memWrite '1' & s_memRead '1' & s_branch '1' & s_spEnable '1' & s_popOrPush '1' & s_aluInputPort'1' & s_wbSelector '1' & s_hlt '1' & s_jumpTypeSelector '2' & s_AluOrStack '1' & s_StoreEnable '1' & s_outEnable '1';
-		-- output ports
 		o_readData1, o_readData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		o_aluOP : OUT STD_LOGIC_VECTOR(4 DOWNTO 0);
 		o_aluSrc : OUT STD_LOGIC;
@@ -29,7 +27,7 @@ ARCHITECTURE a_decodeExecBuffer OF decodeExecute IS
 BEGIN
 	PROCESS (clk, i_flushEnable)
 	BEGIN
-		IF i_flushEnable(1) = '1' AND rising_edge(clk) THEN
+		IF (i_flushEnable = "10" AND rising_edge(clk)) THEN
 			o_cuSignals <= (OTHERS => '0');
 			o_readData1 <= (OTHERS => '0');
 			o_readData2 <= (OTHERS => '0');
