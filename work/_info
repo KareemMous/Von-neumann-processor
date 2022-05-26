@@ -1,6 +1,7 @@
 m255
 K4
 z2
+!s11e vcom 2020.1 2020.02, Feb 28 2020
 13
 !s112 1.1
 !i10d 8192
@@ -8,3 +9,317 @@ z2
 !i10f 100
 cModel Technology
 dC:/intelFPGA/18.0
+Edecodeexecute
+Z0 w1653594594
+Z1 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z2 DPx4 ieee 14 std_logic_1164 0 22 cVAk:aDinOX8^VGI1ekP<3
+!i122 16
+Z3 dC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor
+Z4 8C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\ID_EX_buffer.vhd
+Z5 FC:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\ID_EX_buffer.vhd
+l0
+L4 1
+VX=CQfZ[3BVZ3DadNd2b_J3
+!s100 PYAFd7?OLn4HeO]U;JY5e1
+Z6 OV;C;2020.1;71
+32
+Z7 !s110 1653594597
+!i10b 1
+Z8 !s108 1653594597.000000
+Z9 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\ID_EX_buffer.vhd|
+Z10 !s107 C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\ID_EX_buffer.vhd|
+!i113 1
+Z11 o-work work -2002 -explicit
+Z12 tExplicit 1 CvgOpt 0
+Aa_decodeexecbuffer
+R1
+R2
+DEx4 work 13 decodeexecute 0 22 X=CQfZ[3BVZ3DadNd2b_J3
+!i122 16
+l31
+Z13 L30 26
+V2RUk0:GKTjOi2jb6md>8M3
+!s100 jS`=KCmcMPB4_7XNQ`R]<0
+R6
+32
+R7
+!i10b 1
+R8
+R9
+R10
+!i113 1
+R11
+R12
+Efetchdecode
+w1653592640
+R1
+R2
+!i122 11
+R3
+R4
+R5
+l0
+L4 1
+Vn;o`X8Nc]:a5kkgXI<f>L2
+!s100 6=<`eSTLM5W9>OMXbcCd?0
+R6
+32
+!s110 1653592644
+!i10b 1
+!s108 1653592644.000000
+R9
+R10
+!i113 1
+R11
+R12
+Aa_fetchdecode
+R1
+R2
+DEx4 work 11 fetchdecode 0 22 d^FGJEUiaV>zV<3KFVD;70
+!i122 10
+l24
+L23 18
+Vf7ZbBC6YI@z7N`;mm[Q[c3
+!s100 kk@jZDbKEGO@8IiD[IdAS2
+R6
+32
+!s110 1653570706
+!i10b 1
+!s108 1653570706.000000
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\IF_ID_buffer.vhd|
+!s107 C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\IF_ID_buffer.vhd|
+!i113 1
+R11
+R12
+FC:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\IF_ID_buffer.vhd
+w1653570108
+8C:\Users\Lenovo\Documents\GitHub\Von-neumann-processor\IF_ID_buffer.vhd
+Emux2x1
+Z14 w1653561357
+R1
+R2
+!i122 0
+R3
+Z15 8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/2x1MUX.vhd
+Z16 FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/2x1MUX.vhd
+l0
+L4 1
+VA4JjkA7OjPCadUAe`j=cI2
+!s100 OSnYhd6kV^>cL^?hI3gER2
+R6
+32
+Z17 !s110 1653562724
+!i10b 1
+Z18 !s108 1653562723.000000
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/2x1MUX.vhd|
+Z20 !s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/2x1MUX.vhd|
+!i113 1
+R11
+R12
+Aa_mux2x1
+R1
+R2
+DEx4 work 6 mux2x1 0 22 A4JjkA7OjPCadUAe`j=cI2
+!i122 0
+l14
+L13 5
+VdcG=]oX:aS=02>T=1N=l_2
+!s100 kbMAbC?4lJYa4VbeQ>X]n0
+R6
+32
+R17
+!i10b 1
+R18
+R19
+R20
+!i113 1
+R11
+R12
+Emux4x1
+R14
+R1
+R2
+!i122 1
+R3
+Z21 8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/4x1MUX.vhd
+Z22 FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/4x1MUX.vhd
+l0
+L4 1
+Vc=29WG@Z9>;<AZb9JMRA83
+!s100 93h9lhdRX9IT4>E00oC>Q0
+R6
+32
+R17
+!i10b 1
+Z23 !s108 1653562724.000000
+Z24 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/4x1MUX.vhd|
+Z25 !s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/4x1MUX.vhd|
+!i113 1
+R11
+R12
+Aa_mux4x1
+R1
+R2
+DEx4 work 6 mux4x1 0 22 c=29WG@Z9>;<AZb9JMRA83
+!i122 1
+l14
+L13 7
+VTbRR3mc8O@QZb162_>SKG0
+!s100 aT_U`J`^[Q]ZF1XCOPH@Y1
+R6
+32
+R17
+!i10b 1
+R23
+R24
+R25
+!i113 1
+R11
+R12
+Emux8x1
+R14
+R1
+R2
+!i122 2
+R3
+Z26 8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/8x1MUX.vhd
+Z27 FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/8x1MUX.vhd
+l0
+L4 1
+VllPmX>X@NHH0KkICXJdLM0
+!s100 ElGZ@[D68bd_HjU^nJiW:3
+R6
+32
+R17
+!i10b 1
+R23
+Z28 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/8x1MUX.vhd|
+Z29 !s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/8x1MUX.vhd|
+!i113 1
+R11
+R12
+Aa_mux8x1
+R1
+R2
+DEx4 work 6 mux8x1 0 22 llPmX>X@NHH0KkICXJdLM0
+!i122 2
+l14
+L13 13
+V=hKggUfLJBQh>WoFe5?ah0
+!s100 nOl<LMWKODz]7?L7aVn_z3
+R6
+32
+R17
+!i10b 1
+R23
+R28
+R29
+!i113 1
+R11
+R12
+Emy_generic_register
+R14
+R1
+R2
+!i122 4
+R3
+Z30 8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/register.vhd
+Z31 FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/register.vhd
+l0
+L4 1
+V7l`9dl3bIcnDB7:NB4]Fb0
+!s100 POclDJmY8U=>`TDka?_n42
+R6
+32
+R17
+!i10b 1
+R23
+Z32 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/register.vhd|
+Z33 !s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/register.vhd|
+!i113 1
+R11
+R12
+Aarch_register
+R1
+R2
+DEx4 work 19 my_generic_register 0 22 7l`9dl3bIcnDB7:NB4]Fb0
+!i122 4
+l14
+L13 11
+VzHl?H63K^_mPk]m8Wi3Uc2
+!s100 ?F]Z14>O5a>BKYJ>D`maF2
+R6
+32
+R17
+!i10b 1
+R23
+R32
+R33
+!i113 1
+R11
+R12
+Eram
+R14
+Z34 DPx4 ieee 11 numeric_std 0 22 aU^R8eGcicLcUFIaBQSL>3
+R1
+R2
+!i122 3
+R3
+Z35 8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/memory.vhd
+Z36 FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/memory.vhd
+l0
+L6 1
+VAXk]`L=9dFhggM>=AZKIU2
+!s100 YdG2A<UPdM;0^RAzEkQ2T2
+R6
+32
+R17
+!i10b 1
+R23
+Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/memory.vhd|
+Z38 !s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/memory.vhd|
+!i113 1
+R11
+R12
+Asyncrama
+R34
+R1
+R2
+DEx4 work 3 ram 0 22 AXk]`L=9dFhggM>=AZKIU2
+!i122 3
+l23
+L18 16
+VOoM?n<B=O30MA5ok?dYIM3
+!s100 _DXYEc0O=V8h?QzM^0UXP0
+R6
+32
+R17
+!i10b 1
+R23
+R37
+R38
+!i113 1
+R11
+R12
+Eregisterfile
+R14
+R1
+R2
+!i122 5
+R3
+8C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/registerFile.vhd
+FC:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/registerFile.vhd
+l0
+L4 1
+VebLT<kmXi^_llXXfe:N?42
+!s100 =7HVNe>@G8DbbHjXlmm0W1
+R6
+32
+R17
+!i10b 1
+R23
+!s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/registerFile.vhd|
+!s107 C:/Users/Lenovo/Documents/GitHub/Von-neumann-processor/registerFile.vhd|
+!i113 1
+R11
+R12
