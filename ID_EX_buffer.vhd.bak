@@ -27,7 +27,7 @@ ARCHITECTURE a_decodeExecBuffer OF decodeExecute IS
 BEGIN
 	PROCESS (clk, i_flushEnable)
 	BEGIN
-		IF (i_flushEnable(1) = '1' AND rising_edge(clk)) THEN
+		IF (i_flushEnable = "10" AND falling_edge(clk)) THEN
 			o_cuSignals <= (OTHERS => '0');
 			o_readData1 <= (OTHERS => '0');
 			o_readData2 <= (OTHERS => '0');
@@ -36,7 +36,7 @@ BEGIN
 			o_wbAddress <= (OTHERS => '0');
 			o_immediate <= (OTHERS => '0');
 			o_PC_plus_one <= (OTHERS => '0');
-		ELSIF (rising_edge(clk)) THEN
+		ELSIF (falling_edge(clk)) THEN
 			o_readData1 <= i_readData1;
 			o_wbAddress <= i_wbAddress;
 			o_PC_plus_one <= i_PC_plus_one;
