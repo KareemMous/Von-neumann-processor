@@ -16,7 +16,7 @@ Process(clk,rst)
 Begin
 IF(rst='1') THEN 
 	q<= (others=>'0');
-ELSIF rising_edge(clk) and enable='1' THEN
+ELSIF (falling_edge(clk)) and enable='1' THEN
 	q<=d;
 End IF;
 END Process;
