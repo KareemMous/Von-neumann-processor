@@ -3,3 +3,10 @@
 *.qpg
 *.qtl
 *.wlf
+*.mti
+*.mpf
+*.mpf
+Von-neumann-processor.mpf
+work/_info
+work/_vmake
+work/_info
