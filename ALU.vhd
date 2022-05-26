@@ -31,7 +31,6 @@ ARCHITECTURE arch OF ALU IS
     SIGNAL tempoperandTwo : STD_LOGIC_VECTOR (32 DOWNTO 0);
 
 BEGIN
-    --Adder: adder_32bit port map(operandOne,operandTwo,CarryIn,AdderResult,CoutAdder);
 
     tempoperandOne <= '0' & operandOne;
     tempoperandTwo <= '0' & operandTwo;
