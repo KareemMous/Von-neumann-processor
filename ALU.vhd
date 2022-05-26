@@ -73,7 +73,7 @@ BEGIN
 
     zf <= ('1') WHEN (signed(Result_internal) = 0 AND (AluOp /= "01000" AND AluOp /= "00000" AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
-        (zf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp /= "10011" AND AluOp /= "10100")
+        (zf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp /= "10011" OR AluOp /= "10100")
         ELSE
         ('0') WHEN (reset = '1')
         ELSE
