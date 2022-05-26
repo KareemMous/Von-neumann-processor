@@ -1,5 +1,6 @@
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 *.qdb
 *.qpg
 *.qtl
@@ -18,3 +19,8 @@ Von-neumann-processor.cr.mti
 vsim.wlf
 >>>>>>> origin/Kareem
 *.bak
+=======
+transcript
+Von-neumann-processor.cr.mti
+vsim.wlf
+>>>>>>> origin/Kareem
