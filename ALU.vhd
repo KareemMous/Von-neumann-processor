@@ -63,24 +63,23 @@ BEGIN
         --SUB
         (subtraction(31 DOWNTO 0)) WHEN AluOp = "01011";
     --Negative flag
-    nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"))
+    nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
-        (nf) WHEN (AluOp = "01000" OR AluOp = "00000")
+        (nf) WHEN (AluOp = "01000" OR AluOp = "00000"OR AluOp /= "10011" OR AluOp /= "10100")
         ELSE
         ('0') WHEN (reset = '1')
         ELSE
         ('0');
 
-    zf <= ('1') WHEN (signed(Result_internal) = 0 AND (AluOp /= "01000" AND AluOp /= "00000"))
+    zf <= ('1') WHEN (signed(Result_internal) = 0 AND (AluOp /= "01000" AND AluOp /= "00000" AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
-        (zf) WHEN (AluOp = "01000" OR AluOp = "00000")
+        (zf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp /= "10011" AND AluOp /= "10100")
         ELSE
         ('0') WHEN (reset = '1')
         ELSE
         ('0');
-    --_/
     cf <=
-        (AdderResult(32)) WHEN AluOp = "01010" OR AluOp = "01101"
+        (AdderResult(32)) WHEN AluOp = "01010" OR AluOp = "01101" --0001
         ELSE
         --subtraction
         ('1') WHEN((AluOp = "01011") AND ((signed(tempoperandOne(31 DOWNTO 0))) > (signed(tempoperandTwo(31 DOWNTO 0)))))
@@ -93,9 +92,9 @@ BEGIN
         ('0') WHEN (reset = '1')
         ELSE
         -- mov nop 
-        (cf) WHEN (AluOp = "01000" OR AluOp = "00000");
+        (cf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp = "10011" OR AluOp = "10100");
 
-    flagEnable <= ('0') WHEN (AluOp = "01000" OR AluOp = "00000")
+    flagEnable <= ('0') WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp = "10011" OR AluOp = "10100")
         ELSE
         ('1');
 
