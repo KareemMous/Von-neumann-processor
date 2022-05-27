@@ -17,7 +17,7 @@ Process(clk,rst)
 
 Begin
 IF(rst='1') THEN 
-	q<= (others=>'1');
+	q<= x"0000FFFFF";--2^20-1
 ELSIF (falling_edge(clk)) and enable='1' THEN
 	q<=d;
 End IF;
