@@ -67,6 +67,14 @@ ARCHITECTURE a_exStage OF EX_Stage IS
         );
     END COMPONENT;
 
+    COMPONENT my_storeHandler IS
+        PORT (
+            i_immediate : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+            i_readData2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+            o_result : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        );
+    END COMPONENT;
+
     SIGNAL s_readData1, s_readData2 : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_aluOP : STD_LOGIC_VECTOR(4 DOWNTO 0);
     SIGNAL s_aluSrc : STD_LOGIC;
@@ -84,9 +92,18 @@ BEGIN
 
     ID_EX : decodeExecute PORT MAP(clk, i_flushEnable, i_readData1, i_readData2, i_wbAddress, i_PC_plus_one, i_inputPort, i_immediate, i_cuSignals, s_readData1, s_readData2, s_aluOP, s_aluSrc, s_cuSignals, s_wbAddress, s_immediate, s_inputPort, s_PC_plus_one);
     --store handler
+    storehandler : my_storeHandler PORT MAP(s_immediate, s_readData2, s_storeHandler);
 
     mux1 : mux2x1 PORT MAP(s_readData2, s_immediate, i_cuSignals(20), s_mux1_readData2OrImm);
     mux2 : mux2x1 PORT MAP(s_mux1_readData2OrImm, s_storeHandler, i_cuSignals(1), s_mux2_mux1OrStoreHandler);
 
     c_alu : ALU PORT MAP(s_readData1, s_mux2_mux1OrStoreHandler, i_cuSignals(19 DOWNTO 15), s_aluResult, s_flags, rst);
+
+    o_aluResult <= s_aluResult;
+    o_flagValues <= s_flags;
+    o_Imm <= s_Immediate;
+    o_Datafromsrc1 <= s_readData1;
+    o_wbAddress <= s_wbAddress;
+    o_inputPort <= s_inputPort;
+
 END a_exStage; -- a_exStage
