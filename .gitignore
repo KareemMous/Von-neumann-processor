@@ -1,0 +1,14 @@
+*.qdb
+*.qpg
+*.qtl
+*.wlf
+*.mti
+*.mpf
+*.mpf
+*.bak
+work/_info
+work/_vmake
+transcript
+Von-neumann-processor.mpf
+Von-neumann-processor.cr.mti
+vsim.wlf

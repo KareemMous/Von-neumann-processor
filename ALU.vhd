@@ -19,7 +19,6 @@ ARCHITECTURE arch OF ALU IS
     SIGNAL movedOperandOne : STD_LOGIC_VECTOR (31 DOWNTO 0);
 
     SIGNAL AdderResult : STD_LOGIC_VECTOR(32 DOWNTO 0);
-    SIGNAL CoutAdder : STD_LOGIC;
     SIGNAL subtraction : STD_LOGIC_VECTOR (32 DOWNTO 0);
     SIGNAL OperandOneAndOperandTwo : STD_LOGIC_VECTOR (32 DOWNTO 0);
 
@@ -28,19 +27,16 @@ ARCHITECTURE arch OF ALU IS
     SIGNAL nf : STD_LOGIC;
     SIGNAL cf : STD_LOGIC;
     SIGNAL flagEnable : STD_LOGIC;
-    SIGNAL incrementCF : STD_LOGIC;
-    SIGNAL deccrementCF : STD_LOGIC;
     SIGNAL tempoperandOne : STD_LOGIC_VECTOR (32 DOWNTO 0);
     SIGNAL tempoperandTwo : STD_LOGIC_VECTOR (32 DOWNTO 0);
 
 BEGIN
-    --Adder: adder_32bit port map(operandOne,operandTwo,CarryIn,AdderResult,CoutAdder);
 
     tempoperandOne <= '0' & operandOne;
     tempoperandTwo <= '0' & operandTwo;
 
     notOperandOne <= NOT operandOne;
-    incrementedoperandOne <= STD_LOGIC_VECTOR(signed(tempoperandTwo(32 DOWNTO 0)) + 1);
+    incrementedoperandOne <= STD_LOGIC_VECTOR(signed(tempoperandOne(32 DOWNTO 0)) + 1);
     subtraction <= STD_LOGIC_VECTOR(signed(tempoperandOne(32 DOWNTO 0)) - signed(tempoperandTwo(32 DOWNTO 0)));
     AdderResult <= STD_LOGIC_VECTOR(signed(tempoperandOne(32 DOWNTO 0)) + signed(tempoperandTwo(32 DOWNTO 0)));
     ----------------0010-- shift Right 0000 |10 -> 1
@@ -63,24 +59,23 @@ BEGIN
         --SUB
         (subtraction(31 DOWNTO 0)) WHEN AluOp = "01011";
     --Negative flag
-    nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"))
+    nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
-        (nf) WHEN (AluOp = "01000" OR AluOp = "00000")
+        (nf) WHEN (AluOp = "01000" OR AluOp = "00000"OR AluOp = "10011" OR AluOp = "10100")
         ELSE
         ('0') WHEN (reset = '1')
         ELSE
         ('0');
 
-    zf <= ('1') WHEN (signed(Result_internal) = 0 AND (AluOp /= "01000" AND AluOp /= "00000"))
+    zf <= ('1') WHEN (signed(Result_internal) = 0 AND (AluOp /= "01000" AND AluOp /= "00000" AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
-        (zf) WHEN (AluOp = "01000" OR AluOp = "00000")
+        (zf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp = "10011" OR AluOp = "10100")
         ELSE
         ('0') WHEN (reset = '1')
         ELSE
         ('0');
-    --_/
     cf <=
-        (AdderResult(32)) WHEN AluOp = "01010" OR AluOp = "01101"
+        (AdderResult(32)) WHEN AluOp = "01010" OR AluOp = "01101" --0001
         ELSE
         --subtraction
         ('1') WHEN((AluOp = "01011") AND ((signed(tempoperandOne(31 DOWNTO 0))) > (signed(tempoperandTwo(31 DOWNTO 0)))))
@@ -93,9 +88,9 @@ BEGIN
         ('0') WHEN (reset = '1')
         ELSE
         -- mov nop 
-        (cf) WHEN (AluOp = "01000" OR AluOp = "00000");
+        (cf) WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp = "10011" OR AluOp = "10100");
 
-    flagEnable <= ('0') WHEN (AluOp = "01000" OR AluOp = "00000")
+    flagEnable <= ('0') WHEN (AluOp = "01000" OR AluOp = "00000" OR AluOp = "10011" OR AluOp = "10100")
         ELSE
         ('1');
 
