@@ -54,10 +54,17 @@ BEGIN
         (operandOne AND operandTwo) WHEN AluOp = "01100"
         ELSE
         --ADD and IADD
-        (AdderResult(31 DOWNTO 0)) WHEN AluOp = "01010" OR AluOp = "01101"
+        (AdderResult(31 DOWNTO 0)) WHEN AluOp = "01010" OR AluOp = "01101" OR AluOp = "10011"
         ELSE
         --SUB
-        (subtraction(31 DOWNTO 0)) WHEN AluOp = "01011";
+        (subtraction(31 DOWNTO 0)) WHEN AluOp = "01011"
+        ELSE
+        --Load immediate
+        (operandTwo) WHEN AluOp = "10010"
+        ELSE
+        --store 
+        (operandTwo) WHEN AluOp = "10100";
+
     --Negative flag
     nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"AND AluOp /= "10011" AND AluOp /= "10100"))
         ELSE
