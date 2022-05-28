@@ -661,7 +661,7 @@ BEGIN
 
       --Memory signals
       s_memWrite <= '0';
-      s_memRead <= '0';
+      s_memRead <= '1';
       s_branch <= '0';
       s_spEnable <= '0';
       s_popOrPush <= '0';
@@ -670,7 +670,7 @@ BEGIN
       s_aluInputPort <= '0';
 
       --W/B signals
-      s_wbSelector <= '1';
+      s_wbSelector <= '0';
 
       --HLT signal
       s_hlt <= '0';

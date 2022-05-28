@@ -122,13 +122,13 @@ BEGIN
 	tristateBufferReg7Read1 : Tristate PORT MAP(qRegister7, readReg1Decoded(7), readData1);
 
 	--Reading rsrc2
-	tristateBufferReg0Read2 : Tristate PORT MAP(qRegister0, readReg1Decoded(0), readData2);
-	tristateBufferReg1Read2 : Tristate PORT MAP(qRegister1, readReg1Decoded(1), readData2);
-	tristateBufferReg2Read2 : Tristate PORT MAP(qRegister2, readReg1Decoded(2), readData2);
-	tristateBufferReg3Read2 : Tristate PORT MAP(qRegister3, readReg1Decoded(3), readData2);
-	tristateBufferReg4Read2 : Tristate PORT MAP(qRegister4, readReg1Decoded(4), readData2);
-	tristateBufferReg5Read2 : Tristate PORT MAP(qRegister5, readReg1Decoded(5), readData2);
-	tristateBufferReg6Read2 : Tristate PORT MAP(qRegister6, readReg1Decoded(6), readData2);
-	tristateBufferReg7Read2 : Tristate PORT MAP(qRegister7, readReg1Decoded(7), readData2);
+	tristateBufferReg0Read2 : Tristate PORT MAP(qRegister0, readReg2Decoded(0), readData2);
+	tristateBufferReg1Read2 : Tristate PORT MAP(qRegister1, readReg2Decoded(1), readData2);
+	tristateBufferReg2Read2 : Tristate PORT MAP(qRegister2, readReg2Decoded(2), readData2);
+	tristateBufferReg3Read2 : Tristate PORT MAP(qRegister3, readReg2Decoded(3), readData2);
+	tristateBufferReg4Read2 : Tristate PORT MAP(qRegister4, readReg2Decoded(4), readData2);
+	tristateBufferReg5Read2 : Tristate PORT MAP(qRegister5, readReg2Decoded(5), readData2);
+	tristateBufferReg6Read2 : Tristate PORT MAP(qRegister6, readReg2Decoded(6), readData2);
+	tristateBufferReg7Read2 : Tristate PORT MAP(qRegister7, readReg2Decoded(7), readData2);
 
 END ARCHITECTURE;
