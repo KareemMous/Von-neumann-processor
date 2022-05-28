@@ -366,7 +366,7 @@ BEGIN
     regfile : registerFile PORT MAP(
         clk,
         rst,
-        s_CU_signals_DS(6),
+        s_regWrite_wb,
         s_mux_DS,
         s_instruction20_18_DS,
         s_instruction26_24_DS,
