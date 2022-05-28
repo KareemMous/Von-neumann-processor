@@ -1,14 +1,17 @@
-Library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-Entity signextend is 
-Port(
-input:in std_logic_vector(15 downto 0);
-output: out std_logic_vector(31 downto 0)
-);
-End signextend;
+ENTITY SignExtend IS
+    PORT (
+        i_input : IN STD_LOGIC_VECTOR(15 DOWNTO 0);
+        o_output : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+    );
+END SignExtend;
 
-Architecture a_signextend of signextend is
-Begin 
-output<="0000000000000000"&input;
-End a_signextend;
+ARCHITECTURE a_signExtend OF SignExtend IS
+
+BEGIN
+
+    o_output <= "0000000000000000" & i_input;
+
+END a_signExtend; -- a_signExtend
