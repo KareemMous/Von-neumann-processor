@@ -1,33 +1,43 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+USE IEEE.numeric_std.ALL;
 
-LIBRARY IEEE;
-USE IEEE.STD_LOGIC_1164.ALL;
-USE IEEE.numeric_std.all;
+ENTITY Memory IS
+	PORT (
+		clk : IN STD_LOGIC;
 
-ENTITY ram IS
-	PORT(
-		clk : IN std_logic;
-		memWrite  : IN std_logic;
-		memRead  : IN std_logic;
-		instructionAddress : IN std_logic_vector(31 DOWNTO 0);
-		dataAddress : IN std_logic_vector(31 DOWNTO 0);	
-		address : IN  std_logic_vector(31 DOWNTO 0);
-		writeData  : IN  std_logic_vector(31 DOWNTO 0);
-		readData : OUT std_logic_vector(31 DOWNTO 0));
-END ENTITY ram;
+		--Data Segment
+		i_memWrite : IN STD_LOGIC;
+		i_memRead : IN STD_LOGIC;
+		i_dataAddress : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		i_writeData : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-ARCHITECTURE syncrama OF ram IS
+		--Instruction segment
+		i_PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		--Outputs 
+		o_instruction : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		o_dataOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+	);
+END ENTITY Memory;
 
-	TYPE ram_type IS ARRAY(0 TO 1048575) OF std_logic_vector(31 DOWNTO 0);
-	SIGNAL ram : ram_type ;
-	
+ARCHITECTURE a_Memory OF Memory IS
+	TYPE ram_type IS ARRAY(0 TO 1048575) OF STD_LOGIC_VECTOR(31 DOWNTO 0);
+	SIGNAL ram : ram_type;
+	SIGNAL instructionEnable : STD_LOGIC;
+BEGIN
+	PROCESS (clk, i_memRead) IS
 	BEGIN
-		PROCESS(clk) IS
-			BEGIN
-				IF rising_edge(clk) THEN  
-					IF memWrite = '1' THEN
-						ram(to_integer(unsigned(dataAddress))) <= writeData;
-					END IF;
-				END IF;
-		END PROCESS;
-		readData <= ram(to_integer(unsigned(dataAddress))) WHEN memRead='1';
-END syncrama;
+		IF i_memWrite = '1' THEN
+			IF falling_edge(clk) THEN
+				o_dataOut <= (OTHERS => 'Z');
+				ram(to_integer(unsigned(i_dataAddress))) <= i_writeData;
+			END IF;
+		ELSIF i_memRead = '1' AND falling_edge(clk) THEN
+
+			o_dataOut <= ram(to_integer(unsigned(i_dataAddress)));
+			--ELSE --No memory operation 
+			--o_instruction <= ram(to_integer(unsigned(i_PC)));
+		END IF;
+		o_instruction <= ram(to_integer(unsigned(i_PC)));
+	END PROCESS;
+END a_Memory;
