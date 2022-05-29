@@ -1,25 +1,23 @@
-Library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-Entity spregister is 
-Generic (n: integer :=32);
-Port(
-d:in std_logic_vector(n-1 downto 0);
-enable,clk,rst : in std_logic;
-q: out std_logic_vector(n-1 downto 0)
-);
-End spregister;
+ENTITY spregister IS
+	GENERIC (n : INTEGER := 32);
+	PORT (
+		d : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
+		enable, clk, rst : IN STD_LOGIC;
+		q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
+	);
+END spregister;
 
-Architecture a_spregister of spregister is
-Begin 
-Process(clk,rst)
-
-
-Begin
-IF(rst='1') THEN 
-	q<= x"0000FFFFF";--2^20-1
-ELSIF (falling_edge(clk)) and enable='1' THEN
-	q<=d;
-End IF;
-END Process;
-End a_spregister;
+ARCHITECTURE a_spregister OF spregister IS
+BEGIN
+	PROCESS (clk, rst)
+	BEGIN
+		IF (rst = '1') THEN
+			q <= x"000FFFFF";--2^20-1
+		ELSIF (falling_edge(clk)) AND enable = '1' THEN
+			q <= d;
+		END IF;
+	END PROCESS;
+END a_spregister;
