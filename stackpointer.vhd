@@ -10,7 +10,7 @@ ENTITY stackpointer IS
         i_spEnable : IN STD_LOGIC;
         i_popPush : IN STD_LOGIC;
 
-        o_sp : OUT STD_LOGIC_VECTOR(19 DOWNTO 0)
+        o_sp : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
 END stackpointer;
 ARCHITECTURE a_stackpointer OF stackpointer IS
@@ -48,24 +48,24 @@ ARCHITECTURE a_stackpointer OF stackpointer IS
     ----Signals
 
     --Old sp signal from sp register
-    SIGNAL s_oldSp : STD_LOGIC_VECTOR(19 DOWNTO 0);
+    SIGNAL s_oldSp : STD_LOGIC_VECTOR(31 DOWNTO 0);
     --Increment/decrement mux output to adder
     SIGNAL s_incDec : INTEGER;
     --New sp signal from adder
-    SIGNAL s_newSp : STD_LOGIC_VECTOR(19 DOWNTO 0);
+    SIGNAL s_newSp : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
     --
 BEGIN
     --SP register wiring
-    m_spRegister : spregister GENERIC MAP(20) PORT MAP(s_newSp, clk, rst, i_spEnable, s_oldSp);
+    m_spRegister : spregister GENERIC MAP(31) PORT MAP(s_newSp, clk, rst, i_spEnable, s_oldSp);
 
     --Increment/decrement mux wiring
     m_mux2x1INt : mux2x1int PORT MAP(1, -1, i_popPush, s_incDec);
 
     --Adder
-   s_newSp <= std_logic_vector(to_signed(to_integer(signed(s_oldSp))+s_incDec, s_newSp'length));
+    s_newSp <= STD_LOGIC_VECTOR(to_signed(to_integer(signed(s_oldSp)) + s_incDec, 32));
 
     --mux
-    m_mux2x1 : mux2x1 Generic Map(20) PORT MAP(s_newSp, s_oldSp, i_popPush, o_sp);
+    m_mux2x1 : mux2x1 GENERIC MAP(32) PORT MAP(s_newSp, s_oldSp, i_popPush, o_sp);
 
 END a_stackpointer;

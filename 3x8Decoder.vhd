@@ -1,26 +1,32 @@
-library ieee;
-Use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
 ENTITY e_3X8Decoder IS
-PORT
-(
-address : IN std_logic_vector(2 DOWNTO 0);
-decodedAddress : OUT std_logic_vector(7 DOWNTO 0)
+    PORT (
+        address : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+        decodedAddress : OUT STD_LOGIC_VECTOR(7 DOWNTO 0)
 
-);
-end e_3X8Decoder;
+    );
+END e_3X8Decoder;
 ARCHITECTURE
-a_3x8Decoder OF e_3X8Decoder is 
-begin 
-decodedAddress<= "00000001"when address(2 downto 0) ="000"
-else "00000010" when  address (2 downto 0)="001"
-else "00000100" when  address (2 downto 0)="010"
-else "00001000" when address (2 downto 0)="011"
-else "00010000" when address (2 downto 0)="100"
-else "00100000" when address (2 downto 0)="101"
-else "01000000" when address (2 downto 0)="110"
-else "10000000" when address (2 downto 0)="111"
-else "00000000";
+    a_3x8Decoder OF e_3X8Decoder IS
+BEGIN
+    decodedAddress <= "00000001"WHEN address(2 DOWNTO 0) = "000"
+        ELSE
+        "00000010" WHEN address (2 DOWNTO 0) = "001"
+        ELSE
+        "00000100" WHEN address (2 DOWNTO 0) = "010"
+        ELSE
+        "00001000" WHEN address (2 DOWNTO 0) = "011"
+        ELSE
+        "00010000" WHEN address (2 DOWNTO 0) = "100"
+        ELSE
+        "00100000" WHEN address (2 DOWNTO 0) = "101"
+        ELSE
+        "01000000" WHEN address (2 DOWNTO 0) = "110"
+        ELSE
+        "10000000" WHEN address (2 DOWNTO 0) = "111"
+        ELSE
+        "00000000";
 
-end a_3x8Decoder;
-
+END a_3x8Decoder;

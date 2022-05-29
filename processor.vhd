@@ -46,7 +46,6 @@ ARCHITECTURE a_processor OF Processor IS
     --------------------Fetch Stage SIgnals-----------------------------------
     --------------------------------------------------------------------------
 
-    SIGNAL s_PC_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_pc_plus_one_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_instruction_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_dataAddress_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -73,7 +72,7 @@ ARCHITECTURE a_processor OF Processor IS
             o_instruction20_18 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
             o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
             o_PC_plus_one : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-            o_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+            o_inputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -134,10 +133,10 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_readData2_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_CU_signals_DS : STD_LOGIC_VECTOR(22 DOWNTO 0);
     SIGNAL s_signExtend_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL s_writeData_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_regSrc_DS : STD_LOGIC;
     -- output of mux to register file---
     SIGNAL s_mux_DS : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL s_jumpTypeSelector : STD_LOGIC_VECTOR(1 DOWNTO 0);
     --------------------------------------------------------------------------
     --------------------------ID/EX Buffer------------------------------------
     --------------------------------------------------------------------------
@@ -166,7 +165,6 @@ ARCHITECTURE a_processor OF Processor IS
     END COMPONENT;
 
     ------------------------ID/EX Buffer Signals------------------------------------
-    SIGNAL s_flushEnable_ID_EX : STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL s_readData1_ID_EX : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_readData2_ID_EX : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_wbAddress_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -204,6 +202,47 @@ ARCHITECTURE a_processor OF Processor IS
             outputSel : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
         );
     END COMPONENT;
+
+    --Jump type selector 4x1 mux
+
+    COMPONENT mux4x1 IS
+        GENERIC (n : INTEGER := 32);
+        PORT (
+            input0, input1, input2, input3 : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
+            sel : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+            outputSel : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    COMPONENT ccr_register IS
+        --Generic (n: integer :=32);
+        PORT (
+
+            --ccr input flags from alu
+            d : IN STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0');
+
+            --ccr enable from ex/mem
+            ccrEnable, clk : IN STD_LOGIC;
+
+            --setC signal from ex/mem
+            setC : IN STD_LOGIC;
+
+            --ccr output flags to jumpTypeSelector mux
+            q : OUT STD_LOGIC_VECTOR(2 DOWNTO 0) := (OTHERS => '0')
+
+        );
+    END COMPONENT;
+
+    COMPONENT mux2x11bit IS
+        PORT (
+            input0, input1 : IN STD_LOGIC;
+            sel : IN STD_LOGIC;
+            outputSel : OUT STD_LOGIC
+        );
+    END COMPONENT;
+
+    --2x1 branch mux output
+    SIGNAL s_branchMuxOutput : STD_LOGIC;
     -----------------------------Execute Stage Signals------------------------------------------
     SIGNAL s_mux1_readData2OrImm : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_mux2_mux1OrStoreHandler : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -212,6 +251,26 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_flags : STD_LOGIC_VECTOR(3 DOWNTO 0);
     SIGNAL s_SP : STD_LOGIC_VECTOR(31 DOWNTO 0);
 
+    --CCR registe to jumpTypeSelector mux
+    SIGNAL s_zeroFlag : STD_LOGIC;
+    SIGNAL s_negativeFlag : STD_LOGIC;
+    SIGNAL s_carryFlag : STD_LOGIC;
+
+    --Jump type selector mux to branch mux
+    SIGNAL s_jumpTypeOutput : STD_LOGIC;
+    SIGNAL s_addressSelector : STD_LOGIC;
+
+    --ccr output 3 bit vector
+    SIGNAL s_ccrOutput : STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+    --branch 4x1 mux
+    COMPONENT mux4x11bit IS
+        PORT (
+            input0, input1, input2, input3 : IN STD_LOGIC;
+            sel : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
+            outputSel : OUT STD_LOGIC
+        );
+    END COMPONENT;
     --------------------------Memory Stage Signals------------------------------------
     COMPONENT executeMemory IS
         PORT (
@@ -239,6 +298,16 @@ ARCHITECTURE a_processor OF Processor IS
             o_memWrite : OUT STD_LOGIC
         );
     END COMPONENT;
+    COMPONENT stackpointer IS
+        --GENERIC (n : INTEGER := 32);
+        PORT (
+            clk, rst : IN STD_LOGIC;
+            i_spEnable : IN STD_LOGIC;
+            i_popPush : IN STD_LOGIC;
+
+            o_sp : OUT STD_LOGIC_VECTOR(19 DOWNTO 0)
+        );
+    END COMPONENT;
     SIGNAL s_cuSignals_EX_MEM : STD_LOGIC_VECTOR(22 DOWNTO 0);
     SIGNAL s_readData1_EX_MEM : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_flushEnable_EX_MEM : STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -253,7 +322,6 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_memWrite_EX_MEM : STD_LOGIC;
     SIGNAL s_dataMemory : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_mux_alu_inputPort : STD_LOGIC_VECTOR(31 DOWNTO 0);
-
     --Memory/Write back buffer
 
     COMPONENT memoryWriteBack IS
@@ -369,7 +437,7 @@ BEGIN
         s_regWrite_wb,
         s_mux_DS,
         s_instruction20_18_DS,
-        s_instruction26_24_DS,
+        s_writeAddressFU_WB,
         --input from memosry stage either alu or memory
         s_writeData_WB,
         s_readData1_DS,
@@ -422,7 +490,20 @@ BEGIN
     o_Datafromsrc1 <= s_readData1_ID_EX;
     o_wbAddress <= s_wbAddress_ID_EX;
     o_inputPort <= s_inputPort_ID_EX;
+    ccrRegister : ccr_register PORT MAP(
+        s_flags(2 DOWNTO 0),
+        s_cuSignals_ID_EX(14),
+        clk,
+        s_cuSignals_ID_EX(13),
+        s_ccrOutput
+    );
 
+    s_zeroFlag <= s_ccrOutput(1);
+    s_negativeFlag <= s_ccrOutput(2);
+    s_carryFlag <= s_ccrOutput(0);
+    -- jump_mux4x1 : mux4x1 GENERIC MAP(1)PORT MAP(s_zeroFlag, s_negativeFlag, s_carryFlag, '1', s_jumpTypeOutput);
+    jump_mux4x11BIT : mux4x11bit PORT MAP(s_zeroFlag, s_negativeFlag, s_carryFlag, '1', s_cuSignals_ID_EX(4 DOWNTO 3), s_jumpTypeOutput);
+    branch_mux2x1 : mux2X11bit PORT MAP('0', s_jumpTypeOutput, s_cuSignals_ID_EX(10), s_branchMuxOutput);
     --------------------------- Memory Stage----------------------------------------
     EX_MEM : executeMemory PORT MAP(
         clk,
@@ -430,7 +511,7 @@ BEGIN
         s_readData1_ID_EX,
         s_wbAddress_ID_EX,
         s_PC_plus_one_ID_EX,
-        s_inputPort_DS,
+        s_inputPort_ID_EX,
         s_immediate_ID_EX,
         s_cuSignals_ID_EX,
         s_aluResult,

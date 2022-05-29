@@ -1,23 +1,23 @@
-Library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-Entity my_generic_register is 
-Generic (n: integer :=32);
-Port(
-d:in std_logic_vector(n-1 downto 0);
-enable,clk,rst : in std_logic;
-q: out std_logic_vector(n-1 downto 0)
-);
-End my_generic_register;
+ENTITY my_generic_register IS
+	GENERIC (n : INTEGER := 32);
+	PORT (
+		d : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
+		enable, clk, rst : IN STD_LOGIC;
+		q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
+	);
+END my_generic_register;
 
-Architecture Arch_Register of my_generic_register is
-Begin 
-Process(clk,rst)
-Begin
-IF(rst='1') THEN 
-	q<= (others=>'0');
-ELSIF (falling_edge(clk)) and enable='1' THEN
-	q<=d;
-End IF;
-END Process;
-End Arch_Register;
+ARCHITECTURE Arch_Register OF my_generic_register IS
+BEGIN
+	PROCESS (clk, rst)
+	BEGIN
+		IF (rst = '1') THEN
+			q <= (OTHERS => '0');
+		ELSIF (falling_edge(clk)) AND enable = '1' THEN
+			q <= d;
+		END IF;
+	END PROCESS;
+END Arch_Register;
