@@ -241,8 +241,6 @@ ARCHITECTURE a_processor OF Processor IS
         );
     END COMPONENT;
 
-    --2x1 branch mux output
-    SIGNAL s_branchMuxOutput : STD_LOGIC;
     -----------------------------Execute Stage Signals------------------------------------------
     SIGNAL s_mux1_readData2OrImm : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_mux2_mux1OrStoreHandler : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -263,6 +261,9 @@ ARCHITECTURE a_processor OF Processor IS
     --ccr output 3 bit vector
     SIGNAL s_ccrOutput : STD_LOGIC_VECTOR(2 DOWNTO 0);
 
+    --2x1 branch mux output
+    SIGNAL s_branchMuxOutput : STD_LOGIC;
+
     --branch 4x1 mux
     COMPONENT mux4x11bit IS
         PORT (
@@ -271,6 +272,47 @@ ARCHITECTURE a_processor OF Processor IS
             outputSel : OUT STD_LOGIC
         );
     END COMPONENT;
+    ----Forwarding unit
+    COMPONENT forwardingunit IS
+        PORT (
+
+            --From EX/MEM
+            i_EX_MEM_writeAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_EX_MEM_wbSelector : IN STD_LOGIC;
+
+            --From MEM/WB
+            i_MEM_WB_writeAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_MEM_WB_wbSelector : IN STD_LOGIC;
+
+            --From IF/ID
+            i_IF_ID_readRegister1 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_IF_ID_readRegister2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+            --Forwarding unit outputs to th MUXs
+            o_forwarSignalOp1 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0);
+            o_forwarSignalOp2 : OUT STD_LOGIC_VECTOR(1 DOWNTO 0)
+        );
+    END COMPONENT;
+
+    ----Forwarding unit signals
+
+    --ID/EX read registers
+    SIGNAL s_readRegister1_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL s_readRegister2_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
+
+    --EX/MEM W/B address and W/B selector
+    SIGNAL s_writeAddress_EX_MEM : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL s_WB_Selector_EX_MEM : STD_LOGIC;
+
+    --MEM/WB W/B address and W/B selector
+    SIGNAL s_writeAddress_MEM_WB : STD_LOGIC_VECTOR(2 DOWNTO 0);
+    SIGNAL s_WB_Selector_MEM_WB : STD_LOGIC;
+
+    --Data from EX/MEM signal(ALU TO ALU)
+    SIGNAL s_data_EX_MEM : STD_LOGIC_VECTOR(31 DOWNTO 0);
+
+    --Data from MEM/WB signal(MEMORY TO ALU)
+    SIGNAL s_data_MEM_WB : STD_LOGIC_VECTOR(31 DOWNTO 0);
     --------------------------Memory Stage Signals------------------------------------
     COMPONENT executeMemory IS
         PORT (
