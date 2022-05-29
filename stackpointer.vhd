@@ -7,8 +7,8 @@ ENTITY stackpointer IS
     --GENERIC (n : INTEGER := 32);
     PORT (
         clk, rst : IN STD_LOGIC;
-        i_spEnable : IN STD_LOGIC;
-        i_popPush : IN STD_LOGIC;
+        i_spEnable : IN STD_LOGIC;--9
+        i_popPush : IN STD_LOGIC;--8
 
         o_sp : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
     );
@@ -57,13 +57,13 @@ ARCHITECTURE a_stackpointer OF stackpointer IS
     --
 BEGIN
     --SP register wiring
-    m_spRegister : spregister GENERIC MAP(31) PORT MAP(s_newSp, clk, rst, i_spEnable, s_oldSp);
+    m_spRegister : spregister GENERIC MAP(32) PORT MAP(s_newSp, clk, rst, i_spEnable, s_oldSp);
 
     --Increment/decrement mux wiring
     m_mux2x1INt : mux2x1int PORT MAP(1, -1, i_popPush, s_incDec);
 
     --Adder
-    s_newSp <= STD_LOGIC_VECTOR(to_signed(to_integer(signed(s_oldSp)) + s_incDec, 32));
+    s_newSp <= STD_LOGIC_VECTOR(to_signed(to_integer(unsigned(s_oldSp)) + s_incDec, 32));
 
     --mux
     m_mux2x1 : mux2x1 GENERIC MAP(32) PORT MAP(s_newSp, s_oldSp, i_popPush, o_sp);

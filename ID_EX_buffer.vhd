@@ -7,6 +7,7 @@ ENTITY decodeExecute IS
 		--input ports
 		i_flushEnable : IN STD_LOGIC_VECTOR(1 DOWNTO 0);
 		i_readData1, i_readData2 : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
+		i_readAddress1, i_readAddress2 : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 		i_wbAddress : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
 		i_PC_plus_one : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		i_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -19,6 +20,7 @@ ENTITY decodeExecute IS
 		o_wbAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 		o_immediate : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
 		o_inputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		o_readAddress1, o_readAddress2 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
 		o_PC_plus_one : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
 END decodeExecute;
@@ -36,6 +38,9 @@ BEGIN
 			o_wbAddress <= (OTHERS => '0');
 			o_immediate <= (OTHERS => '0');
 			o_PC_plus_one <= (OTHERS => '0');
+			o_inputPort <= (OTHERS => '0');
+			o_readAddress1 <= (OTHERS => '0');
+			o_readAddress2 <= (OTHERS => '0');
 		ELSIF (rising_edge(clk)) THEN
 			o_readData1 <= i_readData1;
 			o_wbAddress <= i_wbAddress;
@@ -46,6 +51,8 @@ BEGIN
 			o_immediate <= i_immediate;
 			o_readData2 <= i_readData2;
 			o_inputPort <= i_inputPort;
+			o_readAddress1 <= i_readAddress1;
+			o_readAddress2 <= i_readAddress2;
 		END IF;
 	END PROCESS;
 END a_decodeExecBuffer;

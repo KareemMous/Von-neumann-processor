@@ -6,7 +6,7 @@ ENTITY spregister IS
 	PORT (
 		d : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
 		enable, clk, rst : IN STD_LOGIC;
-		q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
+		q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0) := x"000FFFFF"
 	);
 END spregister;
 

@@ -670,7 +670,7 @@ BEGIN
       s_aluInputPort <= '0';
 
       --W/B signals
-      s_wbSelector <= '0';
+      s_wbSelector <= '1';
 
       --HLT signal
       s_hlt <= '0';
