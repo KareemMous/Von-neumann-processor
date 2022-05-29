@@ -46,7 +46,6 @@ ARCHITECTURE a_processor OF Processor IS
     --------------------Fetch Stage SIgnals-----------------------------------
     --------------------------------------------------------------------------
 
-    SIGNAL s_PC_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_pc_plus_one_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_instruction_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_dataAddress_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
@@ -73,7 +72,7 @@ ARCHITECTURE a_processor OF Processor IS
             o_instruction20_18 : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
             o_immediate : OUT STD_LOGIC_VECTOR(15 DOWNTO 0);
             o_PC_plus_one : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-            o_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0)
+            o_inputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
         );
     END COMPONENT;
 
@@ -134,7 +133,6 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_readData2_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_CU_signals_DS : STD_LOGIC_VECTOR(22 DOWNTO 0);
     SIGNAL s_signExtend_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL s_writeData_DS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_regSrc_DS : STD_LOGIC;
     -- output of mux to register file---
     SIGNAL s_mux_DS : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -166,7 +164,6 @@ ARCHITECTURE a_processor OF Processor IS
     END COMPONENT;
 
     ------------------------ID/EX Buffer Signals------------------------------------
-    SIGNAL s_flushEnable_ID_EX : STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL s_readData1_ID_EX : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_readData2_ID_EX : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_wbAddress_ID_EX : STD_LOGIC_VECTOR(2 DOWNTO 0);
@@ -239,6 +236,16 @@ ARCHITECTURE a_processor OF Processor IS
             o_memWrite : OUT STD_LOGIC
         );
     END COMPONENT;
+    COMPONENT stackpointer IS
+        --GENERIC (n : INTEGER := 32);
+        PORT (
+            clk, rst : IN STD_LOGIC;
+            i_spEnable : IN STD_LOGIC;
+            i_popPush : IN STD_LOGIC;
+
+            o_sp : OUT STD_LOGIC_VECTOR(19 DOWNTO 0)
+        );
+    END COMPONENT;
     SIGNAL s_cuSignals_EX_MEM : STD_LOGIC_VECTOR(22 DOWNTO 0);
     SIGNAL s_readData1_EX_MEM : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_flushEnable_EX_MEM : STD_LOGIC_VECTOR(1 DOWNTO 0);
@@ -253,7 +260,6 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_memWrite_EX_MEM : STD_LOGIC;
     SIGNAL s_dataMemory : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_mux_alu_inputPort : STD_LOGIC_VECTOR(31 DOWNTO 0);
-
     --Memory/Write back buffer
 
     COMPONENT memoryWriteBack IS
@@ -301,7 +307,6 @@ ARCHITECTURE a_processor OF Processor IS
 
     --Write data signal
     SIGNAL s_writeData_WB : STD_LOGIC_VECTOR(31 DOWNTO 0);
-
 BEGIN
     -------------------------Fetch Stage------------------------------------
 
@@ -369,7 +374,7 @@ BEGIN
         s_regWrite_wb,
         s_mux_DS,
         s_instruction20_18_DS,
-        s_instruction26_24_DS,
+        s_writeAddressFU_WB,
         --input from memosry stage either alu or memory
         s_writeData_WB,
         s_readData1_DS,
@@ -430,7 +435,7 @@ BEGIN
         s_readData1_ID_EX,
         s_wbAddress_ID_EX,
         s_PC_plus_one_ID_EX,
-        s_inputPort_DS,
+        s_inputPort_ID_EX,
         s_immediate_ID_EX,
         s_cuSignals_ID_EX,
         s_aluResult,
