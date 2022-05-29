@@ -26,31 +26,24 @@ add wave -position insertpoint sim:/processor/regfile/Register4/q
 add wave -position insertpoint sim:/processor/regfile/Register5/q
 add wave -position insertpoint sim:/processor/regfile/Register6/q
 add wave -position insertpoint sim:/processor/regfile/Register7/q
-force -freeze sim:/processor/i_PC 16#000000FF 0
+force -freeze sim:/processor/rst 0 0
+force -freeze sim:/processor/pc/D 16#000000FF 0
+run
+noforce sim:/processor/pc/D
 force -freeze sim:/processor/i_inputPort 16#00000005 0
 run
-force -freeze sim:/processor/i_PC 16#00000100 0
 force -freeze sim:/processor/i_inputPort 16#00000019 0
 run
-force -freeze sim:/processor/i_PC 16#000000101 0
 force -freeze sim:/processor/i_inputPort 16#FFFFFFFF 0
 run
-force -freeze sim:/processor/i_PC 16#00000102 0
 force -freeze sim:/processor/i_inputPort 16#FFFFF320 0
 run
-force -freeze sim:/processor/i_PC 16#00000103 0
 run
-force -freeze sim:/processor/i_PC 16#00000104 0
 run
-force -freeze sim:/processor/i_PC 16#00000105 0
 run
-force -freeze sim:/processor/i_PC 16#00000106 0
 run
-force -freeze sim:/processor/i_PC 16#00000107 0
 run
-force -freeze sim:/processor/i_PC 16#00000108 0
 run
-force -freeze sim:/processor/i_PC 16#00000109 0
 run
 run
 run
