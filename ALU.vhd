@@ -63,7 +63,9 @@ BEGIN
         (operandTwo) WHEN AluOp = "10010"
         ELSE
         --store 
-        (operandTwo) WHEN AluOp = "10100";
+        (operandTwo) WHEN AluOp = "10100"
+        ELSE
+        operandOne WHEN AluOp = "00001";
 
     --Negative flag
     nf <= ('1') WHEN (signed(Result_internal) < 0 AND (AluOp /= "01000" AND AluOp /= "00000"AND AluOp /= "10011" AND AluOp /= "10100"))

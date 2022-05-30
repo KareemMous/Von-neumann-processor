@@ -27,9 +27,9 @@ ARCHITECTURE a_forwardingunit OF forwardingunit IS
 BEGIN
 
     o_forwardSignalOp1 <=
-        "01" WHEN (i_EX_MEM_wbSelector = '1' AND i_IF_ID_readRegister1 = i_EX_MEM_writeAddress)
+        "10" WHEN (i_EX_MEM_wbSelector = '1' AND i_IF_ID_readRegister1 = i_EX_MEM_writeAddress)
         ELSE
-        "10" WHEN (i_MEM_WB_wbSelector = '1' AND i_IF_ID_readRegister1 = i_MEM_WB_writeAddress)
+        "01" WHEN (i_MEM_WB_wbSelector = '1' AND i_IF_ID_readRegister1 = i_MEM_WB_writeAddress)
         ELSE
         "00";
 

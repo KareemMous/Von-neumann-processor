@@ -6,17 +6,9 @@ ENTITY Processor IS
     PORT (
         clk : IN STD_LOGIC;
         rst : IN STD_LOGIC;
-
-        i_PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
         i_inputPort : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 
-        o_aluResult : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        o_flagValues : OUT STD_LOGIC_VECTOR(3 DOWNTO 0);
-        o_Imm : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        o_Datafromsrc1 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
-        o_wbAddress : OUT STD_LOGIC_VECTOR(2 DOWNTO 0);
-        o_inputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
-        --o_inputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
+        o_outputPort : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 
     );
 END Processor;
@@ -67,13 +59,13 @@ ARCHITECTURE a_processor OF Processor IS
     SIGNAL s_pc_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_pc_plus_one_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_nextPcOrImm : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL s_structuralHazard : STD_LOGIC;
+    SIGNAL s_structuralHazard : STD_LOGIC := '0';
     SIGNAL s_stallOrNextPC : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_nextPc : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_instruction_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_dataAddress_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
     SIGNAL s_writeData_FS : STD_LOGIC_VECTOR(31 DOWNTO 0);
-    SIGNAL s_flushEnable_FS : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL s_flushEnable_IF_ID : STD_LOGIC_VECTOR(1 DOWNTO 0);
     SIGNAL s_readAddressMemory : STD_LOGIC_VECTOR(31 DOWNTO 0);
     --------------------------------------------------------------------------
     -------------------------IF/ID buffer-------------------------------------
@@ -135,13 +127,34 @@ ARCHITECTURE a_processor OF Processor IS
             readData2 : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
         );
     END COMPONENT;
+
+    COMPONENT hazardDetectionUnit IS
+        PORT (
+            rst : IN STD_LOGIC;
+            i_memRead_ID_EX : IN STD_LOGIC;
+            i_memWrite_ID_EX : IN STD_LOGIC;
+            i_Rdst_ID_EX : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            -- i_memReadAdd_EX_MEM : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            -- i_memWriteAdd_EX_MEM : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_Rsrc1_DS : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_Rsrc2_DS : IN STD_LOGIC_VECTOR(2 DOWNTO 0);
+            i_branch : IN STD_LOGIC;
+            -- i_ReturnSignal : IN STD_LOGIC;
+            i_hlt : IN STD_LOGIC;
+            o_flushEnable_IF_ID : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := "01";
+            o_flushEnable_ID_EX : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := "01";
+            o_flushEnable_EX_MEM : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := "01";
+            o_flushEnable_WB : OUT STD_LOGIC_VECTOR(1 DOWNTO 0) := "01";
+            o_structuralHazard : OUT STD_LOGIC := '0'
+        );
+    END COMPONENT;
     --------------------------------------------------------------------------
     -------------------Decode Stage Signals-----------------------------------
     --------------------------------------------------------------------------
 
     -----inputs to buffer---------
 
-    SIGNAL s_flushEnable_DS : STD_LOGIC_VECTOR(1 DOWNTO 0);
+    SIGNAL s_flushEnable_ID_EX : STD_LOGIC_VECTOR(1 DOWNTO 0);
 
     ------outputs from buffer--------
     SIGNAL s_instruction31_27_DS : STD_LOGIC_VECTOR(4 DOWNTO 0);
@@ -428,24 +441,34 @@ ARCHITECTURE a_processor OF Processor IS
 
     --Write data signal
     SIGNAL s_writeData_WB : STD_LOGIC_VECTOR(31 DOWNTO 0);
+    ----------------------------Output port----------------------------------
+    COMPONENT My_nDFF_OUTPORT IS
+        GENERIC (n : INTEGER := 32);
+        PORT (
+            W_Enable : IN STD_LOGIC;
+            D : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
+            Q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0)
+        );
+    END COMPONENT;
 
 BEGIN
     -------------------------Fetch Stage------------------------------------
 
-    s_flushEnable_FS <= "01";
-    s_flushEnable_DS <= (OTHERS => '0');
-    s_flushEnable_WB <= (OTHERS => '0');
+    -- s_flushEnable_IF_ID <= "01";
+    -- s_flushEnable_ID_EX <= (OTHERS => '0');
+    -- s_flushEnable_WB <= (OTHERS => '0');
 
     mux_nextPcOrImm : mux2x1 PORT MAP(
         s_pc_plus_one_FS,
         --to be edited
         s_immediate_EX_MEM,
-        '0', s_nextPcOrImm
+        s_branchMuxOutput,
+        s_nextPcOrImm
     );
     mux_stopPc : mux2x1 PORT MAP(
         s_nextPcOrImm,
         s_pc_FS,
-        '0', -- replace with s_structuralHazard
+        s_structuralHazard,
         s_stallOrNextPC
     );
 
@@ -512,7 +535,7 @@ BEGIN
         s_instruction_FS,
         s_pc_plus_one_FS,
         i_inputPort,
-        s_flushEnable_FS,
+        s_flushEnable_IF_ID,
         s_instruction31_27_DS,
         s_instruction26_24_DS,
         s_instruction23_21_DS,
@@ -553,7 +576,7 @@ BEGIN
     --------------------------Decode Execute Buffer--------------------------------------
     ID_EX : decodeExecute PORT MAP(
         clk,
-        s_flushEnable_DS,
+        s_flushEnable_ID_EX,
         s_readData1_DS,
         s_readData2_DS,
         s_mux_DS,
@@ -575,6 +598,25 @@ BEGIN
         s_readAddress2_ID_EX,
         s_PC_plus_one_ID_EX
     );
+
+    --------------------------------Hazard Detection Unit-----------------------------------------------
+    hdu : hazardDetectionUnit PORT MAP(
+        rst,
+        s_cuSignals_ID_EX(11),
+        s_cuSignals_ID_EX(12),
+        s_wbAddress_ID_EX,
+        s_mux_DS,
+        s_instruction20_18_DS,
+        s_cuSignals_ID_EX(10),
+        -- s_cuSignals_ID_EX(),
+        s_cuSignals_ID_EX(5),
+        s_flushEnable_IF_ID,
+        s_flushEnable_ID_EX,
+        s_flushEnable_EX_MEM,
+        s_flushEnable_WB,
+        s_structuralHazard
+    );
+
     ----------------------------------Execute Stage------------------------------------------------------
     storehandler : my_storeHandler PORT MAP(
         s_immediate_ID_EX,
@@ -611,12 +653,8 @@ BEGIN
         rst
     );
 
-    o_aluResult <= s_aluResult;
-    o_flagValues <= s_flags;
-    o_Imm <= s_immediate_ID_EX;
-    o_Datafromsrc1 <= s_readData1_ID_EX;
-    o_wbAddress <= s_wbAddress_ID_EX;
-    o_inputPort <= s_inputPort_ID_EX;
+    op : My_nDFF_OUTPORT PORT MAP(s_cuSignals_ID_EX(0), s_mux_operandOne, o_outputPort);
+
     ccrRegister : ccr_register PORT MAP(
         s_flags(2 DOWNTO 0),
         s_cuSignals_ID_EX(14),
