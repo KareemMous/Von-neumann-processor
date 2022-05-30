@@ -1,16 +1,18 @@
-library ieee;
-use ieee.std_logic_1164.all;
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
 
-entity mux2x1int is 
-    port (
-            input0,input1: in integer;
-            sel:in std_logic;
-            outputSel :out integer
-        ); 
-end entity mux2x1int;
+ENTITY mux2x1int IS
+    PORT (
+        input0, input1 : IN INTEGER;
+        sel : IN STD_LOGIC;
+        outputSel : OUT INTEGER;
+        spEnable : IN STD_LOGIC
+    );
+END ENTITY mux2x1int;
 
-architecture a_mux2x1int of mux2x1int is 
-begin 
-outputSel <=   input0 when sel = '0' else
-                input1;  
- end architecture a_mux2x1int;
+ARCHITECTURE a_mux2x1int OF mux2x1int IS
+BEGIN
+    outputSel <= input0 WHEN sel = '0' AND spEnable = '1' ELSE
+        input1 WHEN sel = '1' AND spEnable = '1' ELSE
+        0;
+END ARCHITECTURE a_mux2x1int;

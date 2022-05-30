@@ -2,6 +2,7 @@ vsim -gui work.processor
 add wave -position insertpoint  \
 sim:/processor/CLK
 add wave -position insertpoint sim:/processor/*
+add wave -position insertpoint sim:/processor/stack_pointer/*
 force -freeze sim:/processor/CLK 1 0, 0 {50 ps} -r 100
 mem load -filltype value -filldata 16#00000300 -fillradix hexadecimal /processor/mem/ram(0)
 mem load -filltype value -filldata 16#00000700 -fillradix hexadecimal /processor/mem/ram(1)
@@ -35,10 +36,12 @@ add wave -position insertpoint sim:/processor/regfile/Register4/q
 add wave -position insertpoint sim:/processor/regfile/Register5/q
 add wave -position insertpoint sim:/processor/regfile/Register6/q
 add wave -position insertpoint sim:/processor/regfile/Register7/q
-force -freeze sim:/processor/rst 0 0
-force -freeze sim:/processor/pc/D 16#00000300 0
+force -freeze sim:/processor/rst 1 0
 run
-noforce sim:/processor/pc/D
+force -freeze sim:/processor/rst 0 0
+#force -freeze sim:/processor/pc/D 16#00000300 0
+
+#noforce sim:/processor/pc/D
 force -freeze sim:/processor/i_inputPort 16#00000019 0
 run
 force -freeze sim:/processor/i_inputPort 16#FFFFFFFF 0

@@ -5,6 +5,7 @@ USE IEEE.numeric_std.ALL;
 ENTITY Memory IS
 	PORT (
 		clk : IN STD_LOGIC;
+		rst : IN STD_LOGIC;
 
 		--Data Segment
 		i_memWrite : IN STD_LOGIC;
@@ -25,9 +26,13 @@ ARCHITECTURE a_Memory OF Memory IS
 	SIGNAL ram : ram_type;
 	SIGNAL instructionEnable : STD_LOGIC;
 BEGIN
-	PROCESS (clk, i_memRead) IS
+	PROCESS (clk, i_memRead, rst) IS
 	BEGIN
-		IF i_memWrite = '1' THEN
+		IF (rst = '1') THEN
+			instructionEnable <= '0';
+			o_instruction <= ram(0);
+
+		ELSIF i_memWrite = '1' THEN
 			IF falling_edge(clk) THEN
 				o_dataOut <= (OTHERS => 'Z');
 				ram(to_integer(unsigned(i_dataAddress))) <= i_writeData;
@@ -38,6 +43,8 @@ BEGIN
 			--ELSE --No memory operation 
 			--o_instruction <= ram(to_integer(unsigned(i_PC)));
 		END IF;
-		o_instruction <= ram(to_integer(unsigned(i_PC)));
+		IF (rst = '0') THEN
+			o_instruction <= ram(to_integer(unsigned(i_PC)));
+		END IF;
 	END PROCESS;
 END a_Memory;

@@ -38,6 +38,7 @@ ARCHITECTURE a_processor OF Processor IS
     COMPONENT Memory IS
         PORT (
             clk : IN STD_LOGIC;
+            rst : IN STD_LOGIC;
 
             --Data Segment
             i_memWrite : IN STD_LOGIC;
@@ -487,6 +488,7 @@ BEGIN
     );
     mem : Memory PORT MAP(
         clk,
+        rst,
         s_memWrite_EX_MEM,
         s_memRead_EX_MEM,
         s_readAddressMemory,
@@ -582,8 +584,8 @@ BEGIN
 
     mux_operandOne : mux4x1 PORT MAP(
         s_readData1_ID_EX,
-        s_aluResult_EX_MEM,
         s_writeData_WB,
+        s_aluResult_EX_MEM,
         (OTHERS => '0'),
         s_forwardSignalOp1,
         s_mux_operandOne
