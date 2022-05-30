@@ -15,7 +15,7 @@ END spregister;
 
 ARCHITECTURE a_spregister OF spregister IS
 BEGIN
-	PROCESS (clk, rst, enable)
+	PROCESS (clk, rst)
 	BEGIN
 		IF (rst = '1') THEN
 			q <= x"000FFFFF";--2^20-1
