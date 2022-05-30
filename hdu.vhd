@@ -28,6 +28,8 @@ BEGIN
     o_flushEnable_IF_ID(0) <= '0' WHEN (i_memRead_ID_EX = '1' AND ((i_Rdst_ID_EX = i_Rsrc1_DS) OR (i_Rdst_ID_EX = i_Rsrc2_DS)))
 ELSE
     '1';
+
+    o_flushEnable_IF_ID(0) <= '0' WHEN (i_memRead_ID_EX = '1' AND i_memWrite_ID_EX = '1');
     o_flushEnable_IF_ID(1) <= '1' WHEN (i_branch = '1' OR rst = '1') ----When there is jump we flush the buffer at the IF/ID
 ELSE
     '0';

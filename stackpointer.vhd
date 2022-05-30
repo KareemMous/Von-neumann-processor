@@ -75,7 +75,7 @@ ARCHITECTURE a_stackpointer OF stackpointer IS
     --
 BEGIN
 
-    --o_sp <= s_oldSp;
+    o_sp <= s_oldSp;
     --SP register wiring
     m_spRegister : spregister GENERIC MAP(32) PORT MAP(s_newSp, i_spEnable, clk, '0', s_oldSp, s_inc, s_dec);
 
@@ -90,7 +90,7 @@ BEGIN
     --s_newSp <= STD_LOGIC_VECTOR(to_signed(to_integer(signed(s_oldSp)) + s_incDec, 32));
     inc_dec_adder : adder GENERIC MAP(32) PORT MAP(s_oldSp, s_incDec, s_newSp);
     --mux
-    m_mux2x1 : mux2x1 GENERIC MAP(32) PORT MAP(s_newSp, s_oldSp, i_popPush, o_sp);
+    -- m_mux2x1 : mux2x1 GENERIC MAP(32) PORT MAP(s_newSp, s_oldSp, i_popPush, o_sp);
 
     --m_regMux2x1 : mux2x1 GENERIC MAP(32) PORT MAP(s_oldSp, s_newSp, i_spEnable, s_o_sp);
 END a_stackpointer;

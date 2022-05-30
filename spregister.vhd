@@ -19,7 +19,7 @@ BEGIN
 	BEGIN
 		IF (rst = '1') THEN
 			q <= x"000FFFFF";--2^20-1
-		ELSIF ((falling_edge(clk)) AND enable = '1') THEN
+		ELSIF ((falling_edge(clk))) THEN
 			q <= d;
 
 		END IF;
