@@ -8,8 +8,8 @@ ENTITY spregister IS
 		enable : IN STD_LOGIC;
 		clk, rst : IN STD_LOGIC;
 		q : OUT STD_LOGIC_VECTOR(n - 1 DOWNTO 0) := x"000FFFFF";
-		inc : OUT INTEGER;
-		DEC : OUT INTEGER
+		inc : OUT INTEGER := 1;
+		DEC : OUT INTEGER := - 1
 	);
 END spregister;
 
@@ -19,10 +19,9 @@ BEGIN
 	BEGIN
 		IF (rst = '1') THEN
 			q <= x"000FFFFF";--2^20-1
-		ELSIF (falling_edge(clk)) AND enable = '1' THEN
+		ELSIF ((falling_edge(clk)) AND enable = '1') THEN
 			q <= d;
-			inc <= 1;
-			dec <= - 1;
+
 		END IF;
 	END PROCESS;
 END a_spregister;
