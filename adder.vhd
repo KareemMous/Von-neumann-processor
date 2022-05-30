@@ -2,7 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE IEEE.numeric_std.ALL;
 ENTITY adder IS
-  GENERIC (n : INTEGER := 32);
+  GENERIC (n : INTEGER := 16);
   PORT (
     D : IN STD_LOGIC_VECTOR(n - 1 DOWNTO 0);
     val : INTEGER;
