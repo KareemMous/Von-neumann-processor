@@ -17,6 +17,7 @@ ENTITY Memory IS
 		i_PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
 		--Outputs 
 		o_instruction : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+		structural_hazard : OUT STD_LOGIC;
 		o_dataOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0)
 	);
 END ENTITY Memory;
@@ -30,20 +31,23 @@ BEGIN
 	BEGIN
 		IF (rst = '1') THEN
 			instructionEnable <= '0';
+
 			o_instruction <= ram(0);
 
 		ELSIF i_memWrite = '1' THEN
 			IF falling_edge(clk) THEN
+				-- structural_hazard <= '1';
 				o_dataOut <= (OTHERS => 'Z');
 				ram(to_integer(unsigned(i_dataAddress))) <= i_writeData;
 			END IF;
 		ELSIF i_memRead = '1' AND falling_edge(clk) THEN
 
+			-- structural_hazard <= '1';
 			o_dataOut <= ram(to_integer(unsigned(i_dataAddress)));
 			--ELSE --No memory operation 
 			--o_instruction <= ram(to_integer(unsigned(i_PC)));
-		END IF;
-		IF (rst = '0') THEN
+		ELSIF (rst = '0') THEN
+			structural_hazard <= '0';
 			o_instruction <= ram(to_integer(unsigned(i_PC)));
 		END IF;
 	END PROCESS;

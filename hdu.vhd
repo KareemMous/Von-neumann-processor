@@ -25,11 +25,15 @@ END hazardDetectionUnit;
 ARCHITECTURE arch OF hazardDetectionUnit IS
 
 BEGIN
-    o_flushEnable_IF_ID(0) <= '0' WHEN (i_memRead_ID_EX = '1' AND ((i_Rdst_ID_EX = i_Rsrc1_DS) OR (i_Rdst_ID_EX = i_Rsrc2_DS)))
-ELSE
-    '1';
+    PROCESS (i_memRead_ID_EX, i_memWrite_ID_EX)
+    BEGIN
+        IF (i_memRead_ID_EX = '1' OR i_memWrite_ID_EX = '1') THEN
+            o_flushEnable_IF_ID(0) <= '0';
+        ELSE
+            o_flushEnable_IF_ID(0) <= '1';
+        END IF;
+    END PROCESS;
 
-    o_flushEnable_IF_ID(0) <= '0' WHEN (i_memRead_ID_EX = '1' AND i_memWrite_ID_EX = '1');
     o_flushEnable_IF_ID(1) <= '1' WHEN (i_branch = '1' OR rst = '1') ----When there is jump we flush the buffer at the IF/ID
 ELSE
     '0';
@@ -44,8 +48,10 @@ ELSE
 ELSE
     '0';
 
-    o_structuralHazard <= '1' WHEN i_hlt = '1'
+    o_structuralHazard <= '1' WHEN(i_hlt = '1'OR i_memRead_ID_EX = '1' OR i_memWrite_ID_EX = '1')
         ELSE
-        '0' WHEN rst = '1';
+        '0' WHEN rst = '1'
+        ELSE
+        '0';
 
 END ARCHITECTURE; -- arch

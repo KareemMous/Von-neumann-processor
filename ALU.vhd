@@ -44,6 +44,10 @@ BEGIN
         --NOT
         (notOperandOne) WHEN AluOp = "00011"
         ELSE
+        (operandOne) WHEN AluOp = "10000"
+        ELSE
+        (operandOne) WHEN AluOp = "10001"
+        ELSE
         --INC
         (incrementedoperandOne(31 DOWNTO 0)) WHEN AluOp = "00100"
         ELSE

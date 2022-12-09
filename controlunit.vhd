@@ -806,65 +806,177 @@ BEGIN
       s_StoreEnable <= '0';
 
       --JN
+    ELSIF instructionInput = "11001" THEN
+      -----Register Signals
+      s_regWrite <= '0';
+      s_regSrc <= '0';
+
+      --ALU signals
+      s_aluSrc <= '1';
+      --CCR
+      s_ccrEnable <= '0';
+      s_setC <= '0';
+
+      --Memory signals
+      s_memWrite <= '0';
+      s_memRead <= '0';
+      s_branch <= '1';
+      s_spEnable <= '0';
+      s_popOrPush <= '0';
+
+      --ALU/Input port signal
+      s_aluInputPort <= '0';
+
+      --W/B signals
+      s_wbSelector <= '0';
+
+      --HLT signal
+      s_hlt <= '0';
+
+      --Jump selector signal
+      s_jumpTypeSelector <= "01";
+
+      --Output port signal
+      s_outEnable <= '0';
+      --ALU or STACK signal
+      s_AluOrStack <= '0';
+
+      --Store Enable Signal
+      s_StoreEnable <= '0';
+
+      --JC
+    ELSIF instructionInput = "11010" THEN
+      -----Register Signals
+      s_regWrite <= '0';
+      s_regSrc <= '0';
+
+      --ALU signals
+      s_aluSrc <= '1';
+      --CCR
+      s_ccrEnable <= '0';
+      s_setC <= '0';
+
+      --Memory signals
+      s_memWrite <= '0';
+      s_memRead <= '0';
+      s_branch <= '1';
+      s_spEnable <= '0';
+      s_popOrPush <= '0';
+
+      --ALU/Input port signal
+      s_aluInputPort <= '0';
+
+      --W/B signals
+      s_wbSelector <= '0';
+
+      --HLT signal
+      s_hlt <= '0';
+
+      --Jump selector signal
+      s_jumpTypeSelector <= "10";
+
+      --Output port signal
+      s_outEnable <= '0';
+      --ALU or STACK signal
+      s_AluOrStack <= '0';
+
+      --Store Enable Signal
+      s_StoreEnable <= '0';
+
+      --JMP
+
+    ELSIF instructionInput = "11011" THEN
+      -----Register Signals
+      s_regWrite <= '0';
+      s_regSrc <= '0';
+
+      --ALU signals
+      s_aluSrc <= '1';
+      --CCR
+      s_ccrEnable <= '0';
+      s_setC <= '0';
+
+      --Memory signals
+      s_memWrite <= '0';
+      s_memRead <= '0';
+      s_branch <= '1';
+      s_spEnable <= '0';
+      s_popOrPush <= '0';
+
+      --ALU/Input port signal
+      s_aluInputPort <= '0';
+
+      --W/B signals
+      s_wbSelector <= '0';
+
+      --HLT signal
+      s_hlt <= '0';
+
+      --Jump selector signal
+      s_jumpTypeSelector <= "11";
+
+      --Output port signal
+      s_outEnable <= '0';
+      --ALU or STACK signal
+      s_AluOrStack <= '0';
+
+      --Store Enable Signal
+      s_StoreEnable <= '0';
+
       --JC
       --JMP
+    ELSIF instructionInput = "11011" THEN
+      -----Register Signals
+      s_regWrite <= '0';
+      s_regSrc <= '0';
+
+      --ALU signals
+      s_aluSrc <= '1';
+      --CCR
+      s_ccrEnable <= '0';
+      s_setC <= '0';
+
+      --Memory signals
+      s_memWrite <= '0';
+      s_memRead <= '0';
+      s_branch <= '1';
+      s_spEnable <= '0';
+      s_popOrPush <= '0';
+
+      --ALU/Input port signal
+      s_aluInputPort <= '0';
+
+      --W/B signals
+      s_wbSelector <= '0';
+
+      --HLT signal
+      s_hlt <= '0';
+
+      --Jump selector signal
+      s_jumpTypeSelector <= "11";
+
+      --Output port signal
+      s_outEnable <= '0';
+      --ALU or STACK signal
+      s_AluOrStack <= '0';
+
+      --Store Enable Signal
+      s_StoreEnable <= '0';
       --CALL
       --RET
       --INT
       --RTI
-   
+      --JN
+      --CALL
+      --RET
+      --INT
+      --RTI
+    END IF;
+  END PROCESS;
 
-  ELSIF instructionInput = "11011" THEN
-    -----Register Signals
-    s_regWrite <= '0';
-    s_regSrc <= '0';
+  registerSource <= s_regSrc;
+  s_aluOp <= instructionInput;
 
-    --ALU signals
-    s_aluSrc <= '1';
-    --CCR
-    s_ccrEnable <= '0';
-    s_setC <= '0';
-
-    --Memory signals
-    s_memWrite <= '0';
-    s_memRead <= '0';
-    s_branch <= '1';
-    s_spEnable <= '0';
-    s_popOrPush <= '0';
-
-    --ALU/Input port signal
-    s_aluInputPort <= '0';
-
-    --W/B signals
-    s_wbSelector <= '0';
-
-    --HLT signal
-    s_hlt <= '0';
-
-    --Jump selector signal
-    s_jumpTypeSelector <= "11";
-
-    --Output port signal
-    s_outEnable <= '0';
-    --ALU or STACK signal
-    s_AluOrStack <= '0';
-
-    --Store Enable Signal
-    s_StoreEnable <= '0';
-
-    --JN
-    --JC
-    --JMP
-    --CALL
-    --RET
-    --INT
-    --RTI
-  END IF;
-END PROCESS;
-
-registerSource <= s_regSrc;
-s_aluOp <= instructionInput;
-
-controlUnitSignals <= s_regWrite & s_regSrc & s_aluSrc & s_aluOp & s_ccrEnable & s_setC & s_memWrite & s_memRead & s_branch & s_spEnable & s_popOrPush & s_aluInputPort & s_wbSelector & s_hlt & s_jumpTypeSelector & s_AluOrStack & s_StoreEnable & s_outEnable;
+  controlUnitSignals <= s_regWrite & s_regSrc & s_aluSrc & s_aluOp & s_ccrEnable & s_setC & s_memWrite & s_memRead & s_branch & s_spEnable & s_popOrPush & s_aluInputPort & s_wbSelector & s_hlt & s_jumpTypeSelector & s_AluOrStack & s_StoreEnable & s_outEnable;
 
 END a_controlunit;

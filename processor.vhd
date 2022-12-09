@@ -42,6 +42,7 @@ ARCHITECTURE a_processor OF Processor IS
             i_PC : IN STD_LOGIC_VECTOR(31 DOWNTO 0);
             --Outputs 
             o_instruction : OUT STD_LOGIC_VECTOR(31 DOWNTO 0);
+            structural_hazard : OUT STD_LOGIC;
             o_dataOut : OUT STD_LOGIC_VECTOR(31 DOWNTO 0));
     END COMPONENT;
     COMPONENT adder IS
@@ -461,7 +462,7 @@ BEGIN
     mux_nextPcOrImm : mux2x1 PORT MAP(
         s_pc_plus_one_FS,
         --to be edited
-        s_immediate_EX_MEM,
+        s_immediate_ID_EX,
         s_branchMuxOutput,
         s_nextPcOrImm
     );
@@ -518,6 +519,7 @@ BEGIN
         s_writeData_FS,
         s_pc_FS,
         s_instruction_FS,
+        s_structuralHazard,
         s_dataMemory
     );
 
@@ -602,8 +604,8 @@ BEGIN
     --------------------------------Hazard Detection Unit-----------------------------------------------
     hdu : hazardDetectionUnit PORT MAP(
         rst,
-        s_cuSignals_ID_EX(11),
-        s_cuSignals_ID_EX(12),
+        s_cuSignals_EX_MEM(11),
+        s_cuSignals_EX_MEM(12),
         s_wbAddress_ID_EX,
         s_mux_DS,
         s_instruction20_18_DS,

@@ -37,6 +37,12 @@ BEGIN
 			o_immediate <= i_instruction(15 DOWNTO 0);
 			o_PC_plus_one <= i_PC_plus_one;
 			o_inputPort <= i_inputPort;
+		ELSIF (rising_edge(clk) AND i_flushEnable(0) = '0') THEN
+			o_instruction31_27 <= "00000";
+			o_immediate <= (OTHERS => '0');
+			o_PC_plus_one <= (OTHERS => '0');
+			o_inputPort <= (OTHERS => '0');
+
 		END IF;
 	END PROCESS;
 END a_fetchDecode;
